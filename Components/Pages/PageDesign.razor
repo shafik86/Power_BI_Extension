@@ -1,15 +1,70 @@
-﻿@page "/design/{pageList}"
+﻿@page "/design/{pageId:int}"
+@inject IDesignService _designService
+@inject ICategoryService _categoryService
 
-<PageTitle>@pageList</PageTitle>
+@rendermode InteractiveServer
+
+<PageTitle>@Title</PageTitle>
 
 
-    <h1>@pageList</h1>
+    <h1>@Title</h1>
 
+@* <h1 style="text-align-last:center;" class="pa-4 m-2 p-2">@Text1</h1> *@
+@if (isLoading == true)
+{
+    <p> Loading list dashboards ... </p>
+}
+else
+{
+    <a href="/design/add" class="btn btn-primary float-end mb-3">Add new design</a>
+    <div class="row col-12">
+        @foreach (var design in Designs)
+        {
+            @* <div class="bg">
+    </div> *@
+            <div class="nft">
+                <div class='main'>
+                    <img class="tokenImage" src="@design.Thumb" alt="NFT" />
+                    <h3>@design.Name</h3>
+                    <p class='description' style="height:100px;">@design.Description</p>
+                    <hr />
+                    <div class="creator">
+                        <div class="row inline col-12">
+                            <div class="col-6">
+                                <button class="button-36"><a class="button" href="@($"DashboardView/{design.Id}")">View</a></button>
+                            </div>
+                            <div class="col-6">
+                                <button class="button-36"><a class="button" href="@($"Edit/{design.Id}")">Edit</a></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
 
 
 @code {
     [Parameter]
-    public string pageList { get; set; }
+    public int pageId { get; set; } = 0;
+    public List<PBIDesign> Designs { get; set; } = new List<PBIDesign>();
+    public Category category { get; set; } = new Category();
+    public bool isLoading { get; set; } = true;
+    public string Title { get; set; }
 
+    protected override async Task OnParametersSetAsync()
+    {
+        isLoading = true;
+        if (pageId != 0)
+        {
+
+            category = await _categoryService.GetCategoryById(pageId);
+            var result = await _designService.getAllDesign();
+            Designs = result.Where(e => e.CatId == category.Id).ToList();
+            Title = category.Name;
+            isLoading = false;
+        }
+    }
 
 }

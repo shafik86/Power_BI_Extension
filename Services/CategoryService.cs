@@ -10,7 +10,7 @@ namespace Power_BI_Extension.Services
         {
             _AppDbContext = appDbContext;
         }
-
+        public List<Category> categories { get; set; } = new List<Category>();
         public AppDbContext _AppDbContext { get; }
 
         public async Task DeleteCategory(int id)
@@ -28,6 +28,7 @@ namespace Power_BI_Extension.Services
         public async Task<List<Category>> GetAllCategories()
         {
             var result = await _AppDbContext.categories.ToListAsync();
+            categories = result;
             return result;
         }
 

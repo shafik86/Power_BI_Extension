@@ -10,6 +10,7 @@ namespace Power_BI_Extension.Services
         Task<Category> GetCategoryByName(string categoryName);
         Task<Category> UpdateCategory(Category category);
         Task DeleteCategory(int id);
+        
 
     }
 }

@@ -9,6 +9,6 @@ namespace Power_BI_Extension.Services
         Task<PBIDesign> AddDesign(PBIDesign design);
         Task DeleteDesign(int designId);
         Task<PBIDesign> UpdateDesign(PBIDesign design);
-
+        Task<List<PBIDesign>> GetDesignByCategory(int designCategoryId);
     }
 }

@@ -37,7 +37,7 @@ else
                     <td class="flex-column">@item.CatId</td>
                     <td class="flex-column"><img src="@item.Thumb" width="50" height="50" /></td>
                     <td class="flex-column">
-                        <a href="#" class="text-warning mr-3">Edit</a>
+                        <a href=@($"/design/edit/{item.Id}") class="text-warning mr-3">Edit</a>
                         <a href="#" class="text-danger ">Delete</a>
                     </td>
                 </tr>

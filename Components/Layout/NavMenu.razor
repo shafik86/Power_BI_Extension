@@ -21,7 +21,7 @@
             @foreach (var list in categories)
             {
 
-                    <NavLink class="nav-link" href="@($"design/{@list.Name}")">
+                    <NavLink class="nav-link" href="@($"design/{@list.Id}")">
                         <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> @list.Name
                     </NavLink>
             }

@@ -36,6 +36,12 @@ namespace Power_BI_Extension.Services
             return result;
         }
 
+        public async Task<List<PBIDesign>> GetDesignByCategory(int designCategoryId)
+        {
+            var result = await _AppDbContext.Designs.Where(e=> e.CatId == designCategoryId).ToListAsync();
+            return result;
+        }
+
         public async Task<PBIDesign> getDesignById(int designId)
         {
             var result = await _AppDbContext.Designs.FindAsync(designId);
