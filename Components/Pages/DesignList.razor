@@ -1,0 +1,63 @@
+﻿@page "/design/list"
+
+@inject IDesignService _designService
+
+@attribute [StreamRendering]
+
+<PageTitle>Design BI</PageTitle>
+
+<h3>Design List</h3>
+@if (isLoading == true)
+{
+    <h3>
+        Loading Designs ...
+    </h3>
+}
+else
+{
+    <div class="w-100">
+        <a href="/category/add" class="btn btn-primary float-end mb-3">Add new design</a>
+        <table class="table table-striped">
+            <tr>
+                <th class="flex-sm-column">Number</th>
+                <th class="flex-sm-column">Name</th>
+                <th class="flex-sm-column">Description</th>
+                <th class="flex-sm-column">URL</th>
+                <th class="flex-sm-column">Category</th>
+                <th class="flex-sm-column">Image</th>
+                <th class="flex-sm-column">Action</th>
+            </tr>
+            @foreach (var item in Designs)
+            {
+                <tr class="">
+                    <td class="flex-column">@item.Id</td>
+                    <td class="flex-column">@item.Name</td>
+                    <td class="flex-column">@item.Description</td>
+                    <td class="flex-column">@item.PbiUrl.Substring(0,25)</td>
+                    <td class="flex-column">@item.CatId</td>
+                    <td class="flex-column"><img src="@item.Thumb" width="50" height="50" /></td>
+                    <td class="flex-column">
+                        <a href="#" class="text-warning mr-3">Edit</a>
+                        <a href="#" class="text-danger ">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+@code {
+    public bool isLoading { get; set; } = true;
+    public List<PBIDesign> Designs { get; set; } = new List<PBIDesign>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _designService.getAllDesign();
+        await Task.Delay(500);
+        if (result != null)
+        {
+            isLoading = false;
+            Designs = result;
+        }
+    }
+}

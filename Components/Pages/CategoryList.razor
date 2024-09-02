@@ -1,0 +1,55 @@
+﻿@page "/category/list"
+
+@inject ICategoryService _categoryService
+
+@rendermode InteractiveServer
+
+<PageTitle>Category</PageTitle>
+
+<h3>Category List</h3>
+@if (isLoading == true)
+{
+    <h3>
+        Loading category ...
+    </h3>
+}
+else
+{
+    <div class="">
+        <a href="/category/add" class="btn btn-primary float-end mb-3">Add new category</a>
+        <table class="table table-striped">
+            <tr>
+                <th class="flex-sm-column">Number</th>
+                <th class="flex-sm-column">Name</th>
+                <th class="flex-sm-column">Action</th>
+            </tr>
+            @foreach (var item in categories)
+            {
+                <tr class="">
+                    <td class="flex-column">@item.Id</td>
+                    <td class="flex-column">@item.Name</td>
+                    <td class="flex-column">
+                        <a href="#" class="text-warning m-3">Edit</a>
+                        <a href="#" class="text-danger m-3">Delete</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+}
+
+@code {
+    public bool isLoading { get; set; } = true;
+    public List<Category> categories { get; set; } = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await _categoryService.GetAllCategories();
+        await Task.Delay(500);
+        if (result != null)
+        {
+            isLoading = false;
+            categories = result;
+        }
+    }
+}

@@ -1,0 +1,11 @@
+﻿<div id="markups" style="height:100%">
+
+    <iframe id="pbiFrame" title="RangkaianPakej" width="1000" height="1000"
+            src="@srcUrl" frameborder="0" allowFullScreen="true"></iframe>
+</div>
+
+@code {
+    [CascadingParameter]
+    public string srcUrl { get; set; }
+
+}

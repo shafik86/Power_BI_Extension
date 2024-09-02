@@ -1,0 +1,63 @@
+﻿@page "/category/add"
+@page "/category/edit/{id:int}"
+
+@inject ICategoryService _categoryService
+
+@attribute [StreamRendering]
+
+<PageTitle>@category.Name</PageTitle>
+
+    <h3>@pageName </h3>
+
+    <div class="border-2 btn-outline-dark">
+        <EditForm Model="category" OnSubmit="AddCategory" class="form-control">
+            <div class="col-6 pa-3 mb-1 form-control">
+            <label for="categoryNme">Category Name</label>
+            <InputText @bind-Value="category.Name" />
+            </div>
+        <div class="col-6 pa-3 mb-1 form-control">
+            <button type="submit" class="btn btn-outline-primary">@ButtonText</button>
+        </div>
+        </EditForm>
+    </div>
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+    public string pageName { get; set; } = "Add new Category";
+    public bool isLoading { get; set; } = true;
+    public Category category { get; set; } = new Category();
+    public List<Category> categories { get; set; } = new List<Category>();
+    public string ButtonText { get; set; } = "Save";
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        categories = await _categoryService.GetAllCategories();
+        if (Id != 0)
+        {
+            isLoading = false;
+            ButtonText = "Save";
+            var result = await _categoryService.GetCategoryById(Id);
+            if (result != null)
+            {
+                category = result;
+                pageName = "Edit " + category.Name;
+            }
+
+        }
+        else
+        {
+            isLoading = false;
+            ButtonText = "Add";
+            pageName = "Add new category ";
+        }
+
+    }
+
+    public Task AddCategory()
+    {
+        return null;
+    }
+}

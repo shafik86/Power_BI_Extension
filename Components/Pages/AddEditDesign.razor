@@ -1,0 +1,78 @@
+﻿@page "/edit/"
+@page "/edit/{id:int}"
+
+@inject IDesignService _designService
+@inject ICategoryService _categoryService
+
+@attribute [StreamRendering]
+
+<PageTitle>@Design.Name</PageTitle>
+
+    <h3>@pageName </h3>
+
+<div class="container col-12">
+    <div class="border-danger pa-4 m-3 ">
+        <EditForm Model="Design" OnSubmit="SubmitUpdate">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="col-12 pa-3 mb-1 form-control">
+                <label for="DesignName">Design Name</label>
+                <InputText @bind-Value="Design.Name" />
+            </div>
+            <div class="col-12 pa-3 mb-1 form-control">
+                <label for="DesignDescription" class="form-label">Design Description</label>
+                <InputText @bind-Value="Design.Description" />
+            </div>
+            <div class="col-12 pa-3 mb-1 form-control">
+                <label for="DesignURL" class="form-label">Design URL</label>
+                <InputText @bind-Value="Design.PbiUrl" />
+            </div>
+            <div class="col-12 pa-3 mb-1 form-control">
+                <label for="DesignCategory" class="form-label">Design Category</label>
+                <InputNumber @bind-Value="Design.CatId" />
+            </div>
+            <div class="col-12 pa-3 mb-1 form-control">
+                <label for="DesignThumbnail" class="form-label">Design Thumbnail</label>
+                <InputFile @bind-Value="Design.Thumb" />
+            </div>
+            <div class="col-6 pa-3 mb-1 form-control">
+                <button type="submit" class="btn btn-outline-primary" >@ButtonText</button>    
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; } = 0;
+    public string pageName { get; set; } = "Add new Design";
+    public bool isLoading { get; set; } = true;
+    public PBIDesign Design { get; set; } = new PBIDesign();
+    public List<Category> Categories { get; set; } = new List<Category>();
+    public string ButtonText { get; set; } = "Save";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Categories = await _categoryService.GetAllCategories();
+        if (Id != 0)
+        {
+            isLoading = false;
+            ButtonText = "Save";
+            var result = await _designService.getDesignById(Id);
+            if (result is not null)
+                Design = result;
+            pageName = "Edit " + Design.Name;
+        }
+        else
+        {
+            isLoading = false;
+            ButtonText = "Add";
+        }
+    }
+
+    public Task SubmitUpdate()
+    {
+        return null;
+    }
+
+}

@@ -1,0 +1,54 @@
+﻿@inject ICategoryService _category
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">Power_BI_Extension</a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+                <div class="nav-item px-3">
+    
+            @foreach (var list in categories)
+            {
+
+                    <NavLink class="nav-link" href="@($"design/{@list.Name}")">
+                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> @list.Name
+                    </NavLink>
+            }
+        
+                </div>
+        <div class="nav-item px-3 list-group">
+            Admin
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/category/list">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Category List
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/design/list">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Design List
+            </NavLink>
+        </div>
+
+    </nav>
+</div>
+
+@code {
+    public List<Category> categories { get; set; } = new List<Category>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = await _category.GetAllCategories();
+    }
+}

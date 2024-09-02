@@ -1,0 +1,41 @@
+﻿@page "/DashboardView/{id:int}"
+@inject IDesignService _design
+@attribute [StreamRendering]
+
+<h2 style="text-align-last:center; color:white;" class="pa-4 m-2 p-2">Templates @title</h2>
+
+@if (id != 0 || id > 0)
+{
+    <div Class="container-fluid w-100 h-75">
+        <CascadingValue Value="@Design.PbiUrl">
+            <DashboardDesign></DashboardDesign>
+        </CascadingValue>
+    </div>
+}
+else
+{
+    <p>Loading ...</p>
+}
+
+@code {
+    [Parameter]
+    public int id { get; set; } = 0;
+    public string SrcUrl { get; set; } = "";
+    public PBIDesign Design { get; set; } = new PBIDesign();
+    public string title { get; set; } = "";
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await Task.Delay(500);
+        if (id != 0)
+        {
+            var dash = await _design.getDesignById((int)id);
+            if (dash is not null)
+            {
+                Design = dash;
+            }
+        }
+
+    }
+
+}
