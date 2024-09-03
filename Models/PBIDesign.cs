@@ -11,6 +11,7 @@ namespace Power_BI_Extension.Models
         public string Description { get; set; }
         public string PbiUrl { get; set; }
         public int CatId { get; set; }
+        
 
         [StringLength(maximumLength: 5000)]
         public string Thumb { get; set; } = "images/Thumbs/default.jpg";

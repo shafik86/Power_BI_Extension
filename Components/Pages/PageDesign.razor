@@ -2,7 +2,7 @@
 @inject IDesignService _designService
 @inject ICategoryService _categoryService
 @attribute [StreamRendering]
-@rendermode InteractiveServer
+
 
 <PageTitle>@Title</PageTitle>
 
@@ -57,6 +57,7 @@ else
     protected override async Task OnParametersSetAsync()
     {
         isLoading = true;
+        Task.Delay(500);
         await LoadDesigns();
     }
 

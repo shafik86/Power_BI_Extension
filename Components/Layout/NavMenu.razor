@@ -1,5 +1,7 @@
 ﻿@inject ISideBar _sidebar
-@attribute [StreamRendering]
+@inject ICategoryService categoryService
+@rendermode InteractiveServer
+@* @rendermode @(new InteractiveAutoRenderMode(prerender:false)) *@
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -50,12 +52,14 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Task.Delay(500);
+        
         await loadcategories();
     }
 
     private async Task loadcategories()
     {
         categories = await _sidebar.GetCategories();
+      
     }
+  
 }
