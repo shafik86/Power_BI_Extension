@@ -33,7 +33,12 @@ namespace Power_BI_Extension.Services
         public async Task<List<PBIDesign>> getAllDesign()
         {
             var result = await _AppDbContext.Designs.ToListAsync();
-            return result;
+            if (result is null)
+            {
+                return null;
+            }
+            else
+                return result;
         }
 
         public async Task<List<PBIDesign>> GetDesignByCategory(int designCategoryId)

@@ -27,8 +27,12 @@ namespace Power_BI_Extension.Services
 
         public async Task<List<Category>> GetAllCategories()
         {
+            
             var result = await _AppDbContext.categories.ToListAsync();
-            categories = result;
+            if (result != null)
+            {
+                categories = result;
+            }
             return result;
         }
 

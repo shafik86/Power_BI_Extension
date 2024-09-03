@@ -52,8 +52,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await _designService.getAllDesign();
         await Task.Delay(500);
+        var result = await _designService.getAllDesign();
         if (result != null)
         {
             isLoading = false;

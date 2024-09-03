@@ -16,6 +16,7 @@ options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IDesignService, DesignService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ISideBar, SideBar>();
 
 var app = builder.Build();
 

@@ -1,7 +1,7 @@
 ﻿@page "/design/{pageId:int}"
 @inject IDesignService _designService
 @inject ICategoryService _categoryService
-
+@attribute [StreamRendering]
 @rendermode InteractiveServer
 
 <PageTitle>@Title</PageTitle>
@@ -34,7 +34,8 @@ else
                                 <button class="button-36"><a class="button" href="@($"DashboardView/{design.Id}")">View</a></button>
                             </div>
                             <div class="col-6">
-                                <button class="button-36"><a class="button" href="@($"Edit/{design.Id}")">Edit</a></button>
+                                <button class="button-36"><a class="button float-start" href="@($"/design/edit/{design.Id}")">Edit</a></button>
+                                
                             </div>
                         </div>
                     </div>
@@ -56,6 +57,11 @@ else
     protected override async Task OnParametersSetAsync()
     {
         isLoading = true;
+        await LoadDesigns();
+    }
+
+    private async Task LoadDesigns()
+    {
         if (pageId != 0)
         {
 
@@ -64,6 +70,7 @@ else
             Designs = result.Where(e => e.CatId == category.Id).ToList();
             Title = category.Name;
             isLoading = false;
+            
         }
     }
 

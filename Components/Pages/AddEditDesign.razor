@@ -27,9 +27,15 @@
                 <label for="DesignURL" class="form-label">Design URL</label>
                 <InputText @bind-Value="Design.PbiUrl" />
             </div>
-            <div class="col-12 pa-3 mb-1 form-control">
+            <div class="col-12 pa-3 mb-1 form-control">                
                 <label for="DesignCategory" class="form-label">Design Category</label>
-                <InputNumber @bind-Value="Design.CatId" />
+                <InputSelect @bind-Value="Design.CatId" name="DesignCategory" id="DesignCategory">
+                    @foreach (var cat in Categories)
+                    {
+                        
+                    <option value="@cat.Id">@cat.Name</option>
+                    }
+                </InputSelect>
             </div>
             <div class="col-12 pa-3 mb-1 form-control">
                 <label for="DesignThumbnail" class="form-label">Design Thumbnail</label>
@@ -37,6 +43,7 @@
             </div>
             <div class="col-6 pa-3 mb-1 form-control">
                 <button type="submit" class="btn btn-outline-primary" >@ButtonText</button>    
+                <button type="submit" class="btn btn-outline-warning float-end">Delete</button>
             </div>
         </EditForm>
     </div>
@@ -49,11 +56,22 @@
     public bool isLoading { get; set; } = true;
     public PBIDesign Design { get; set; } = new PBIDesign();
     public List<Category> Categories { get; set; } = new List<Category>();
+    public int catSelect { get; set; }
     public string ButtonText { get; set; } = "Save";
 
     protected override async Task OnParametersSetAsync()
     {
         Categories = await _categoryService.GetAllCategories();
+        await LoadCategories();
+    }
+
+    public Task SubmitUpdate()
+    {
+        return null;
+    }
+
+    private async Task LoadCategories()
+    {
         if (Id != 0)
         {
             isLoading = false;
@@ -68,11 +86,6 @@
             isLoading = false;
             ButtonText = "Add";
         }
-    }
-
-    public Task SubmitUpdate()
-    {
-        return null;
     }
 
 }

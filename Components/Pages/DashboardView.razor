@@ -27,6 +27,11 @@ else
     protected override async Task OnParametersSetAsync()
     {
         await Task.Delay(500);
+        await getDesign();
+
+    }
+    private async Task getDesign()
+    {
         if (id != 0)
         {
             var dash = await _design.getDesignById((int)id);
@@ -35,7 +40,6 @@ else
                 Design = dash;
             }
         }
-
     }
 
 }

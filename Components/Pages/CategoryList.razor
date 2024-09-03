@@ -44,8 +44,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await _categoryService.GetAllCategories();
         await Task.Delay(500);
+        await LoadCategories();
+    }
+
+    private async Task LoadCategories()
+    {
+        var result = await _categoryService.GetAllCategories();
         if (result != null)
         {
             isLoading = false;
