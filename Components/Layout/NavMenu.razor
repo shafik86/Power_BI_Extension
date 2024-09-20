@@ -1,5 +1,6 @@
 ﻿@inject ISideBar _sidebar
-@attribute [StreamRendering]
+@inject ICategoryService _categoryService
+
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -17,17 +18,17 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-                <div class="nav-item px-3">
-    
+        <div class="nav-item px-3">
+
             @foreach (var list in categories)
             {
 
-                    <NavLink class="nav-link" href="@($"design/{@list.Id}")">
-                        <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> @list.Name
-                    </NavLink>
+                <NavLink class="nav-link" href="@($"design/{@list.Id}")">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> @list.Name
+                </NavLink>
             }
-        
-                </div>
+
+        </div>
         <div class="nav-item px-3 list-group">
             Admin
         </div>
@@ -50,12 +51,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Task.Delay(500);
+
         await loadcategories();
+        StateHasChanged();
     }
 
     private async Task loadcategories()
     {
-        categories = await _sidebar.GetCategories();
+        if (categories.Count <= 0)
+        {
+            var cat = await _categoryService.GetAllCategories();
+            categories = cat;
+        }
+        categories =  _categoryService.Categories;
     }
 }

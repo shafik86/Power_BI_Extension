@@ -47,6 +47,15 @@ namespace Power_BI_Extension.Data
                 CatId = 3,
                 Thumb = "./images/default.jpg"
             });
+            modelBuilder.Entity<PBIDesign>().HasData(new PBIDesign
+            {
+                Id = 4,
+                Name = "MKN",
+                Description = "Reka Bentuk ini menunjukkan Kadar Keselamatan negara",
+                PbiUrl = "https://app.powerbi.com/view?r=eyJrIjoiYTIxMjg5NzYtOWUzNC00MWE3LWFlYjctNTY0YWM5NDdjYzE3IiwidCI6ImM2NWIxYzYzLTdjYjctNGFlNy05YzNjLTk5OWI0ZGE1MjM5NiIsImMiOjEwfQ%3D%3D",
+                CatId = 3,
+                Thumb = "./images/default.jpg"
+            });
 
 
             modelBuilder.Entity<Category>().HasData(new

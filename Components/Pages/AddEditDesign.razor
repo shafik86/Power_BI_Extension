@@ -1,6 +1,7 @@
 ﻿@page "/design/add"
 @page "/design/edit/{id:int}"
 
+@inject NavigationManager _navigation
 @inject IDesignService _designService
 @inject ICategoryService _categoryService
 
@@ -12,40 +13,41 @@
 
 <div class="container col-12">
     <div class="border-danger pa-4 m-3 ">
-        <EditForm Model="Design" OnSubmit="SubmitUpdate">
+        <EditForm Model="Design" FormName="AddDesign" OnValidSubmit="SubmitUpdate">
             <DataAnnotationsValidator />
-            <ValidationSummary />
             <div class="col-12 pa-3 mb-1 form-control">
-                <label for="DesignName">Design Name</label>
-                <InputText @bind-Value="Design.Name" />
+                <label for="DesignName" class="form-label">Design Name</label>
+                <InputText id="Name" @bind-Value="Design.Name" class="form-control" />
             </div>
             <div class="col-12 pa-3 mb-1 form-control">
                 <label for="DesignDescription" class="form-label">Design Description</label>
-                <InputText @bind-Value="Design.Description" />
+                <InputText id="Description" @bind-Value="Design.Description" class="form-control" />
             </div>
             <div class="col-12 pa-3 mb-1 form-control">
                 <label for="DesignURL" class="form-label">Design URL</label>
-                <InputText @bind-Value="Design.PbiUrl" />
+                <InputText id="UrlPBI" @bind-Value="Design.PbiUrl" class="form-control" />
             </div>
-            <div class="col-12 pa-3 mb-1 form-control">                
+            <div class="col-12 pa-3 mb-1 form-control">
                 <label for="DesignCategory" class="form-label">Design Category</label>
-                <InputSelect @bind-Value="Design.CatId" name="DesignCategory" id="DesignCategory">
+                <InputSelect @bind-Value="Design.CatId" name="DesignCategory" id="DesignCategory" class="form-select">
                     @foreach (var cat in Categories)
                     {
-                        
-                    <option value="@cat.Id">@cat.Name</option>
+
+                        <option id="categoryId" value="@cat.Id">@cat.Name</option>
                     }
                 </InputSelect>
             </div>
             <div class="col-12 pa-3 mb-1 form-control">
                 <label for="DesignThumbnail" class="form-label">Design Thumbnail</label>
-                <InputFile @bind-Value="Design.Thumb" />
+                <InputFile id="thumbnail" @bind-Value="Design.Thumb" class="form-control" />
             </div>
             <div class="col-6 pa-3 mb-1 form-control">
-                <button type="submit" class="btn btn-outline-primary" >@ButtonText</button>    
-                <button type="submit" class="btn btn-outline-warning float-end">Delete</button>
+                <button type="submit" class="btn btn-outline-primary">@ButtonText</button>
+                <button type="button" @onclick="DeleteDesign" class="btn btn-outline-warning float-end">Delete</button>
             </div>
+            <ValidationSummary />
         </EditForm>
+
     </div>
 </div>
 
@@ -61,16 +63,34 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        Categories = await _categoryService.GetAllCategories();
         await LoadCategories();
+        StateHasChanged();
+        await LoadDesign();
+        StateHasChanged();
     }
 
-    public Task SubmitUpdate()
+    public async Task SubmitUpdate()
     {
-        return null;
+        if (Design.Id == 0)
+        {
+            //Add new Design
+            var result = await _designService.AddDesign(Design);
+            if (result is not null)
+            {
+                _navigation.NavigateTo("/");
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            //Update Design
+            var response = await _designService.UpdateDesign(Design);
+            _navigation.NavigateTo("/");
+
+        }
     }
 
-    private async Task LoadCategories()
+    private async Task LoadDesign()
     {
         if (Id != 0)
         {
@@ -85,6 +105,22 @@
         {
             isLoading = false;
             ButtonText = "Add";
+        }
+    }
+
+    public async Task LoadCategories()
+    {
+        await Task.Delay(250);
+        Categories = _categoryService.Categories;
+    }
+
+    public async Task DeleteDesign()
+    {
+        if (Id != 0)
+        {
+
+            await _designService.DeleteDesign(Id);
+            _navigation.NavigateTo("/");
         }
     }
 

@@ -1,8 +1,8 @@
 ﻿@page "/design/{pageId:int}"
 @inject IDesignService _designService
 @inject ICategoryService _categoryService
-@attribute [StreamRendering]
-@rendermode InteractiveServer
+
+
 
 <PageTitle>@Title</PageTitle>
 
@@ -57,6 +57,8 @@ else
     protected override async Task OnParametersSetAsync()
     {
         isLoading = true;
+        await Task.Delay(500);
+        await LoadCategory();
         await LoadDesigns();
     }
 
@@ -65,13 +67,19 @@ else
         if (pageId != 0)
         {
 
-            category = await _categoryService.GetCategoryById(pageId);
-            var result = await _designService.getAllDesign();
-            Designs = result.Where(e => e.CatId == category.Id).ToList();
+
+
+            Designs = await _designService.GetDesignByCategory(pageId);
+
+
             Title = category.Name;
             isLoading = false;
-            
+
         }
+    }
+    public async Task LoadCategory()
+    {
+        category = await _categoryService.GetCategoryById(pageId);
     }
 
 }

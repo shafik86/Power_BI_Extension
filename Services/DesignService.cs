@@ -15,8 +15,12 @@ namespace Power_BI_Extension.Services
 
         public async Task<PBIDesign> AddDesign(PBIDesign design)
         {
-            _AppDbContext.Designs.AddAsync(design);
-            await _AppDbContext.SaveChangesAsync();
+            if (design != null)
+            {
+
+                _AppDbContext.Designs.AddAsync(design);
+                await _AppDbContext.SaveChangesAsync();
+            }
             return design;
         }
 
@@ -32,7 +36,9 @@ namespace Power_BI_Extension.Services
 
         public async Task<List<PBIDesign>> getAllDesign()
         {
-            var result = await _AppDbContext.Designs.ToListAsync();
+            var result = await _AppDbContext.Designs
+                //.Include(c => c.CatId)
+                .ToListAsync();
             if (result is null)
             {
                 return null;
@@ -41,9 +47,14 @@ namespace Power_BI_Extension.Services
                 return result;
         }
 
+
+
         public async Task<List<PBIDesign>> GetDesignByCategory(int designCategoryId)
         {
-            var result = await _AppDbContext.Designs.Where(e=> e.CatId == designCategoryId).ToListAsync();
+            var result = await _AppDbContext.Designs
+                .Where(e => e.CatId == designCategoryId)
+                //.Include(c => c.CatId)
+                .ToListAsync();
             return result;
         }
 

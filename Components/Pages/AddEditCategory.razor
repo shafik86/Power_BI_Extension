@@ -34,7 +34,7 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        categories = await _categoryService.GetAllCategories();
+        categories =  _categoryService.Categories;
         if (Id != 0)
         {
             isLoading = false;
